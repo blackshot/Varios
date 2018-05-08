@@ -87,17 +87,18 @@ static bool isNumeric(const string& string)
 class TextBox
 {
 public:
-	void Read();                                                        // Número 8
+	void Read();
 	string GetText();
-	string SubString(int Posicion, int Cantidad);           // Número 4
-	int ToInt();                                            // Número 2
-	float ToFloat();                                        // Número 3
-	int Len();                                                          // Número 5
-	bool Prompt;                                                        // Número 6
+	string SubString(int Posicion, int Cantidad);
+	int ToInt();
+	float ToFloat();
+	int Len();
+	int MaxLen();
+	bool Prompt;
 	void SetBackColor(int Valor);
 	void SetForeColor(int Valor);
 	void SetPos(int x, int y);
-	void SetFormat(string Valor);                                       // Número 7
+	void SetFormat(string Valor);
 	int GetBackColor();
 	int GetForeColor();
 	bool ErrorStatus();
@@ -105,10 +106,10 @@ public:
 	void SetPreText(string Valor);
 	TextBox();
 protected:
-	int Row;                                                            // Número 9
-	int Col;                                                            // Número 10
-	int BackColor;                                                      // Número 11
-	int ForeColor;                                                      // Número 12
+	int Row;
+	int Col;
+	int BackColor;
+	int ForeColor;
 	bool Error;
 	void Trim();
 	string Text;
@@ -262,6 +263,11 @@ int TextBox::Len()
 	return Text.length();
 }
 
+int TextBox::MaxLen()
+{
+	return Format.length();
+}
+
 void TextBox::SetBackColor(int Valor)
 {
 	if (0 < Valor < 15)
@@ -336,7 +342,7 @@ int main()
 	Nombre.SetFormat("XXXXXXXXXXXXXXX");
 	Nombre.SetPreText("Nombre");
 	Nombre.Show();
-	Apellidos.SetPos(16, 0);
+	Apellidos.SetPos(Nombre.MaxLen() + 1, 0);
 	Apellidos.SetForeColor(13);
 	Apellidos.SetBackColor(8);
 	Apellidos.Prompt = true;
