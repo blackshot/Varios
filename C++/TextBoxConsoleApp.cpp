@@ -98,6 +98,7 @@ public:
 	void SetBackColor(int Valor);
 	void SetForeColor(int Valor);
 	void SetPos(int x, int y);
+	COORD GetPos();
 	void SetFormat(string Valor);
 	int GetBackColor();
 	int GetForeColor();
@@ -296,6 +297,14 @@ void TextBox::SetPos(int x, int y)
 	Col = x;
 }
 
+COORD TextBox::GetPos()
+{
+	COORD Pos;
+	Pos.X = Col;
+	Pos.Y = Row;
+	return Pos;
+}
+
 int TextBox::GetBackColor()
 {
 	return BackColor;
@@ -336,13 +345,13 @@ int main()
 	TextBox Apellidos;
 
 	Nombre.Prompt = true;
-	Nombre.SetPos(0, 0);
+	Nombre.SetPos(35, 3);
 	Nombre.SetForeColor(0);
 	Nombre.SetBackColor(15);
 	Nombre.SetFormat("XXXXXXXXXXXXXXX");
 	Nombre.SetPreText("Nombre");
 	Nombre.Show();
-	Apellidos.SetPos(Nombre.MaxLen() + 1, 0);
+	Apellidos.SetPos(Nombre.GetPos().X + Nombre.MaxLen() + 1, Nombre.GetPos().Y);
 	Apellidos.SetForeColor(13);
 	Apellidos.SetBackColor(8);
 	Apellidos.Prompt = true;
