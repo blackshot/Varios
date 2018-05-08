@@ -323,13 +323,9 @@ bool TextBox::ErrorStatus()
 void TextBox::Show()
 {
 	gotoxy(Col, Row, ForeColor, BackColor);
-	for (int Contador = 0; Contador < Format.length(); Contador++)
+	cout << Text;
+	for (int Contador = Text.length(); Contador < Format.length(); Contador++)
 	{
-		if (Text.length() > 0 && Contador < Text.length())
-		{
-			cout << Text;
-			Contador = Text.length();
-		}
 		cout << ' ';
 	}
 }
