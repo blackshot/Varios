@@ -66,7 +66,7 @@ static bool isFloat(const string& string) {
 		}
 		++it;
 	}
-	return string.size()>minSize && it == string.end();
+	return string.size() > (unsigned) minSize && it == string.end();
 }
 
 static bool isNumeric(const string& string)
@@ -287,7 +287,7 @@ float TextBox::ToFloat()
 string TextBox::SubString( int Posicion,  int Cantidad)
 {
 	string aux;
-	if (Text.length() >= Posicion + Cantidad)
+	if (Text.length() >= (unsigned) Posicion + Cantidad)
 	{
 		for (int i = Posicion; i < Cantidad + Posicion; i++)
 		{
@@ -314,7 +314,7 @@ int TextBox::MaxLen()
 
 void TextBox::SetBackColor(int Valor)
 {
-	if (0 < Valor < 15)
+	if (0 < Valor && Valor <= 15)
 		BackColor = Valor;
 	else
 	{
@@ -325,7 +325,7 @@ void TextBox::SetBackColor(int Valor)
 
 void TextBox::SetForeColor(int Valor)
 {
-	if (0 < Valor < 15)
+	if (0 < Valor && Valor <= 15)
 		ForeColor = Valor;
 	else
 	{
@@ -367,7 +367,7 @@ void TextBox::Show()
 {
 	gotoxy(Col, Row, ForeColor, BackColor);
 	cout << Text;
-	for (int Contador = Text.length(); Contador < Format.length(); Contador++)
+	for (unsigned int Contador = Text.length(); Contador < Format.length(); Contador++)
 	{
 		if (Format[Contador] == 'A' || Format[Contador] == 'X' || Format[Contador] == '9')
 			cout << ' ';
