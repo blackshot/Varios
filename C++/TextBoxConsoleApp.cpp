@@ -314,7 +314,7 @@ int TextBox::MaxLen()
 
 void TextBox::SetBackColor(int Valor)
 {
-	if (0 < Valor && Valor <= 15)
+	if (0 <= Valor && Valor <= 15)
 		BackColor = Valor;
 	else
 	{
@@ -325,7 +325,7 @@ void TextBox::SetBackColor(int Valor)
 
 void TextBox::SetForeColor(int Valor)
 {
-	if (0 < Valor && Valor <= 15)
+	if (0 <= Valor && Valor <= 15)
 		ForeColor = Valor;
 	else
 	{
@@ -415,7 +415,7 @@ int main()
 	Fecha.Read();
 	//gotoxy(0, 2);
 	cout << endl << "Bienvenido " << Nombre.GetText() << " " << Apellidos.GetText() << endl;
-	cout << FechaDeHoy() << endl;
+	//cout << FechaDeHoy() << endl;
 	if (FechaDeHoy() == Fecha.GetText())
 	{
 		cout << "¡¡¡¡¡¡¡¡FELIZ CUMPLEAÑOS!!!!!!!" << endl;
