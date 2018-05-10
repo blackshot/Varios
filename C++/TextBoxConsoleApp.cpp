@@ -9,6 +9,7 @@
 #include <string>
 #include <conio.h>
 #include <windows.h>
+#include <ctime>
 
 
 using namespace std;
@@ -39,7 +40,7 @@ void gotoxy(int x, int y, int fore = 7, int back = 0)
 	default: color += to_string(fore);
 	}
 	color = "0x00" + color;
-	DWORD COLORE = strtol(color.c_str(), 0, 0);
+	WORD COLORE = stoi(color.c_str(), 0, 0);
 	SetConsoleTextAttribute(hcon, COLORE);
 	COORD dwPos;
 	dwPos.X = x;
@@ -80,6 +81,31 @@ static bool isNumeric(const string& string)
 		return true;
 	}
 	return false;
+}
+
+static string FechaDeHoy()
+{
+	string month, day;
+	time_t now = time(NULL);
+	struct tm timeinfo;
+	localtime_s(&timeinfo, &now);
+	if ((timeinfo.tm_mon + 1) / 10 >= 1.0f)
+	{
+		month = to_string(timeinfo.tm_mon + 1);
+	}
+	else
+	{
+		month = "0" + to_string(timeinfo.tm_mon + 1);
+	}
+	if (timeinfo.tm_mday / 10 >= 1.0f)
+	{
+		day = to_string(timeinfo.tm_mday);
+	}
+	else
+	{
+		day = "0" + to_string(timeinfo.tm_mday);
+	}
+	return day + "/" + month + "/" + to_string(timeinfo.tm_year + 1900);
 }
 
 // FIN UTILIDADES ////////////////////////////////////////
@@ -137,19 +163,19 @@ void TextBox::Trim()
 
 void TextBox::SetFormat(string Valor)
 {
-	int Contador;
-	bool ValidacionOk = true;
-	for (Contador = 0; Contador < Valor.length() - 1 && ValidacionOk; Contador++) {
+	//int Contador;
+	//bool ValidacionOk = true;
+	/*for (Contador = 0; Contador < Valor.length() - 1 && ValidacionOk; Contador++) {
 		if (Valor[Contador] != 'A' && Valor[Contador] != '9' && Valor[Contador] != 'X') {
 			ValidacionOk = false;
 		}
-	}
-	if (ValidacionOk) {
+	}*/
+	//if (ValidacionOk) {
 		Format = Valor;
-	}
-	else {
-		Format = "";
-	}
+	//}
+	//else {
+	//	Format = "";
+	//}
 }
 
 string TextBox::GetText()
@@ -173,21 +199,38 @@ void TextBox::Read()
 		gotoxy(Col, Row, ForeColor, BackColor);
 		for (Contador = 0; Contador < Cantidad_Total; Contador++)
 		{
-			cout << '.';
+			if (Format[Contador] == 'A' || Format[Contador] == 'X' || Format[Contador] == '9')
+				cout << '.';
+			else
+				cout << Format[Contador];
 		}
 	}
 	Tecla = 0;
 	Text.clear();
 	for (Contador = 0; Contador < Cantidad_Total && Tecla != 13; ) {
+		if (!(Format[Contador] == 'A' || Format[Contador] == 'X' || Format[Contador] == '9'))
+		{
+			Text = Text + Format[Contador];
+			Contador++;
+			continue;
+		}
 		gotoxy(Col + Contador, Row, ForeColor, BackColor);
 		Tecla = _getch();
 		if (Tecla == 8 && Text.length() > 0) {
 			Contador--;
+			while(!(Format[Contador] == 'A' || Format[Contador] == 'X' || Format[Contador] == '9'))
+				Contador--;
+			
 			Text = Text.substr(0, Contador);
-			if (Prompt)
-				cout << Tecla << '.' << Tecla;
+			if (Prompt) {
+				gotoxy(Col, Row, ForeColor, BackColor);
+				cout << Text << '.' << Tecla;
+			}
 			else
-				cout << Tecla << ' ' << Tecla;
+			{
+				gotoxy(Col, Row, ForeColor, BackColor);
+				cout << Text << ' ' << Tecla;
+			}		
 		}
 		else {
 			switch (Format[Contador]) {
@@ -241,7 +284,7 @@ float TextBox::ToFloat()
 	}
 }
 
-string TextBox::SubString(int Posicion, int Cantidad)
+string TextBox::SubString( int Posicion,  int Cantidad)
 {
 	string aux;
 	if (Text.length() >= Posicion + Cantidad)
@@ -326,7 +369,10 @@ void TextBox::Show()
 	cout << Text;
 	for (int Contador = Text.length(); Contador < Format.length(); Contador++)
 	{
-		cout << ' ';
+		if (Format[Contador] == 'A' || Format[Contador] == 'X' || Format[Contador] == '9')
+			cout << ' ';
+		else
+			cout << Format[Contador];
 	}
 }
 
@@ -339,9 +385,11 @@ int main()
 {
 	TextBox Nombre;
 	TextBox Apellidos;
+	TextBox Fecha;
+	
 
 	Nombre.Prompt = true;
-	Nombre.SetPos(35, 3);
+	Nombre.SetPos(29, 3);
 	Nombre.SetForeColor(0);
 	Nombre.SetBackColor(15);
 	Nombre.SetFormat("XXXXXXXXXXXXXXX");
@@ -354,11 +402,30 @@ int main()
 	Apellidos.SetFormat("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 	Apellidos.SetPreText("Apellidos");
 	Apellidos.Show();
+	Fecha.Prompt = true;
+	Fecha.SetPos(Apellidos.GetPos().X + Apellidos.MaxLen() + 1, Apellidos.GetPos().Y);
+	Fecha.SetBackColor(4);
+	Fecha.SetForeColor(15);
+	Fecha.SetFormat("99/99/9999");
+	Fecha.SetPreText("Nacimiento");
+	Fecha.Show();
 	_getch();
 	Nombre.Read();
 	Apellidos.Read();
+	Fecha.Read();
 	//gotoxy(0, 2);
 	cout << endl << "Bienvenido " << Nombre.GetText() << " " << Apellidos.GetText() << endl;
+	cout << FechaDeHoy() << endl;
+	if (FechaDeHoy() == Fecha.GetText())
+	{
+		cout << "¡¡¡¡¡¡¡¡FELIZ CUMPLEAÑOS!!!!!!!" << endl;
+	}
+	else
+	{
+		cout << "Hoy no es tu cumpleaños :c " << Fecha.GetText() << endl;
+	}
+		
+
 	cout << endl << "Valor ingresado: " << Nombre.GetText() << " Largo: " << Nombre.Len() << endl
 		<< "Substring(0, 3): " << Nombre.SubString(0, 3) << endl;
 
