@@ -39,9 +39,8 @@ void gotoxy(int x, int y, int fore = 7, int back = 0)
 	case 15: color += "F"; break;
 	default: color += to_string(fore);
 	}
-	color = "0x00" + color;
-	WORD COLORE = stoi(color.c_str(), 0, 0);
-	SetConsoleTextAttribute(hcon, COLORE);
+
+	SetConsoleTextAttribute(hcon, stoi(color.c_str(), 0, 16));
 	COORD dwPos;
 	dwPos.X = x;
 	dwPos.Y = y;
@@ -51,7 +50,7 @@ void gotoxy(int x, int y, int fore = 7, int back = 0)
 static bool isFloat(const string& string) {
 	string::const_iterator it = string.begin();
 	bool puntodecimal = false;
-	int minSize = 0;
+	unsigned int minSize = 0;
 	if (string.size()>0 && (string[0] == '-' || string[0] == '+')) {
 		it++;
 		minSize++;
@@ -66,7 +65,7 @@ static bool isFloat(const string& string) {
 		}
 		++it;
 	}
-	return string.size() > (unsigned) minSize && it == string.end();
+	return string.size() > minSize && it == string.end();
 }
 
 static bool isNumeric(const string& string)
@@ -171,7 +170,9 @@ void TextBox::SetFormat(string Valor)
 		}
 	}*/
 	//if (ValidacionOk) {
-		Format = Valor;
+	if (Valor.length() > 70)
+		Valor = Valor.substr(0, 70);
+	Format = Valor;
 	//}
 	//else {
 	//	Format = "";
