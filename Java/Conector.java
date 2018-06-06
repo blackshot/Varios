@@ -119,3 +119,25 @@ public class Conector implements AutoCloseable{
         this.Desconectar();
     }
 }
+/* METODO DE USO
+
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    ....
+    
+    try(Conector bd = new Conector()){
+        ResultSet rs;
+        rs = bd.Query("SELECT * FROM BLABLABLA");
+        
+        while(rs.next()){
+            System.out.prinln(rs.getString("nombre"));
+        }
+        //EJEMPLO DE INSERT O CUALQUIER OPERACION QUE NO DEVUELVA DATOS
+        boolean error = bd.Update("INSERT INTO TABLA VALUES BLABLABAL");
+        if (error)
+            shit happens;
+        else
+            profit;
+    }
+    catch( SQLException e ){ e.printStackTrace();}
+*/
