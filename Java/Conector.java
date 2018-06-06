@@ -1,5 +1,5 @@
 
-// package blablabla
+// package xddddddd;
 
 // recuerden si van a usar MariaDB tienen que agregar el driver.jar correspondiente al igual que para sqlite
 
@@ -133,11 +133,11 @@ public class Conector implements AutoCloseable{
             System.out.prinln(rs.getString("nombre"));
         }
         //EJEMPLO DE INSERT O CUALQUIER OPERACION QUE NO DEVUELVA DATOS
-        boolean error = bd.Update("INSERT INTO TABLA VALUES BLABLABAL");
-        if (error)
-            shit happens;
-        else
+        boolean exito = bd.Update("INSERT INTO TABLA VALUES BLABLABAL");
+        if (exito)
             profit;
+        else
+            shit happens;
     }
     catch( SQLException e ){ e.printStackTrace();}
 */
