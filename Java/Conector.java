@@ -1,5 +1,5 @@
 
-package mantenedor2;
+//package equisDE;
 
 // recuerden si van a usar MariaDB tienen que agregar el driver.jar correspondiente al igual que para sqlite
 
