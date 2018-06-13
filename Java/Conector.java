@@ -1,5 +1,5 @@
 
-// package xddddddd;
+package mantenedor2;
 
 // recuerden si van a usar MariaDB tienen que agregar el driver.jar correspondiente al igual que para sqlite
 
@@ -14,54 +14,31 @@ public class Conector implements AutoCloseable{
     private Connection conexion = null;
     private Statement statment = null;
     private ResultSet set = null;
-    private boolean mysql = false; // false para usar sqlite (base de datos sin conexion a internet)
+    private boolean mysql = true; // false para usar sqlite (base de datos sin conexion a internet)
 
-    private String url, db, ip, puerto, user, pw;
+    private String url;
+    private String 
+            db = "pene", 
+            ip = "127.0.0.1", 
+            puerto="3306", 
+            user = "root", 
+            pw="";
 	
     
     public Conector () {
-        db = "basededatos";
-        if(mysql){
-            ip = "ingresa la ip aca";
-            user = "nombredeusuario";
-            pw = "contraseña";
-            puerto = "3306"; // puerto sql por defecto		
-            url = "jdbc:mysql://" + ip + ":" + puerto + "/" + db;
-        }
-        else{
+        if(mysql)	
+            url = "jdbc:mysql://" + ip + ":" + puerto + "/" + db + "?user=" + user + "&password=" + pw;
+        else
             url = "jdbc:sqlite:" + db + ".db";
-        }
         try{
-           conexion = getConectar();
+           conexion = DriverManager.getConnection(url);
         }
-        catch(com.mysql.cj.jdbc.exceptions.CommunicationsException e)
+        catch(SQLException e)
         {
             javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos 1");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
         }
-        catch(SQLException e){
-           Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
-        }
     }
-    
-    private Connection getConectar() throws SQLException {
-        if(mysql){
-            return DriverManager.getConnection(url, user, pw);
-        }
-        else
-        {
-            return DriverManager.getConnection(url);
-        }
-        
-    }
-    
-    /*private void setDriver() { // esto no es necesario en las ultimas versiones de java
-        try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver ()); // este es el driver de mariadb o mysql
-        } catch (SQLException ex) {
-            Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
 
     public ResultSet Query(String query){
 
@@ -69,13 +46,13 @@ public class Conector implements AutoCloseable{
             statment = conexion.createStatement();
             set = statment.executeQuery(query);
         }
-        catch(com.mysql.cj.jdbc.exceptions.CommunicationsException e)
+        /*catch(com.mysql.cj.jdbc.exceptions.CommunicationsException e)
         {
             javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos [Query]");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
-        }
+        }*/
         catch (Exception e) {
-            System.out.println("Exception in query method:" + query + "\n\n" + e.getMessage());
+            System.out.println("Excepcion en la consulta [Query]:" + query + "\n\n" + e.getMessage());
         }
         return set;
     }
@@ -87,22 +64,29 @@ public class Conector implements AutoCloseable{
             statment = conexion.createStatement();
             result = statment.executeUpdate(update);
         }
-        catch(com.mysql.cj.jdbc.exceptions.CommunicationsException e)
+        /*catch(com.mysql.cj.jdbc.exceptions.CommunicationsException e)
         {
             javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos [Update]");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
             return false;
-        }
+        }*/
         catch (SQLException e) {
-            System.out.println("Exception in update method:\n" + update + "\n\n" + e.getMessage());
+            System.out.println("Excepcion en la actualizacion [Update]:\n" + update + "\n\n" + e.getMessage());
             return false;
         }
         return (result!=0); // si es 0 ningun registro cambió.
     }
     public void Desconectar(){
         try{
-            conexion.close();
+            if(conexion != null)
+                conexion.close();
+            if (statment != null)
+                statment.close();
+            if(set != null)
+                set.close();
             conexion = null;
+            statment = null;
+            set = null;
         }catch(SQLException e){
              System.out.println("Error al cerrar la conexion");
         }
