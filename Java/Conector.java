@@ -1,5 +1,5 @@
 
-//package equisDE;
+//package blabla;
 
 // recuerden si van a usar MariaDB tienen que agregar el driver.jar correspondiente al igual que para sqlite
 
@@ -19,7 +19,7 @@ public class Conector implements AutoCloseable{
     private String url;
     private String 
             db = "bdnombre", 
-            ip = "ip", 
+            ip = "127.0.0.1", 
             puerto="3306", 
             user = "root", 
             pw="";
@@ -35,7 +35,7 @@ public class Conector implements AutoCloseable{
         }
         catch(SQLException e)
         {
-            javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos");
+            javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos 1");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
         }
     }
@@ -51,7 +51,7 @@ public class Conector implements AutoCloseable{
             javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos [Query]");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
         }*/
-        catch (Exception e) {
+        catch (SQLException e) {
             System.out.println("Excepcion en la consulta [Query]:" + query + "\n\n" + e.getMessage());
         }
         return set;
@@ -99,7 +99,7 @@ public class Conector implements AutoCloseable{
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws Exception{
         this.Desconectar();
     }
 }
