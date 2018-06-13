@@ -18,8 +18,8 @@ public class Conector implements AutoCloseable{
 
     private String url;
     private String 
-            db = "pene", 
-            ip = "127.0.0.1", 
+            db = "bdnombre", 
+            ip = "ip", 
             puerto="3306", 
             user = "root", 
             pw="";
