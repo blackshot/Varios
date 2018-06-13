@@ -14,7 +14,7 @@ public class Conector implements AutoCloseable{
     private Connection conexion = null;
     private Statement statment = null;
     private ResultSet set = null;
-    private boolean mysql = true; // false para usar sqlite (base de datos sin conexion a internet)
+    private boolean mysql = true; // false para usar sqlite (base de datos en archivo sin conexion)
 
     private String url;
     private String 
@@ -35,7 +35,7 @@ public class Conector implements AutoCloseable{
         }
         catch(SQLException e)
         {
-            javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos 1");
+            javax.swing.JOptionPane.showMessageDialog(null, "No se puede conectar a la base de datos");
             Logger.getLogger(Conector.class.getName()).log(Level.SEVERE, null, e);
         }
     }
