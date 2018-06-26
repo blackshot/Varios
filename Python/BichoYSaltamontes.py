@@ -9,6 +9,7 @@ bichito = [0 ,0]
 saltamontes = [0, 0]
 vivo = True # ¿el saltamontes está vivo?
 vidas = [0, 0] # Botiquines de los 2
+cuadraditos = 0
 
 # constantes 
 esquinas = [[0 ,0], [0, 9], [19, 0], [19, 9]]
@@ -17,6 +18,7 @@ bomba = 1
 guarida = 2
 botiquin = 3
 sector = 0
+retraso = 0.50
 
 # BOMBAS
 cont = 0
@@ -90,6 +92,8 @@ elif(bichito[0] >= 10) and (bichito[1] < 5):
 	sector = 3
 else:
 	sector = 4
+
+tempcord = list(bichito)
 while(not termino):
 
 	system("cls")
@@ -106,14 +110,15 @@ while(not termino):
 			else:
 				saltamontes = [random.randint(10, 19), random.randint(5, 9)]
 
-		if(saltamontes == bichito):
+		if(saltamontes == bichito and vivo):
 			print(Fore.RED + "EL SALTAMONTES SE COMIO AL BICHITO :(")
 			if(vivo):
 				print("Saltamones: (", saltamontes[1]+1, ", ", saltamontes[0]+1, ") | Botiquines Robados: ", vidas[1])
 			else:
 				print(Fore.RED + "EL SALTAMONTES EXPLOTO")
-			print("Bichito: (", bichito[1]+1, ", ", bichito[0]+1, ") | Tiempo: ", tiempo, " | Botiquines: ", vidas[0])
-			print("Sector: ", sector)
+			print("\nBichito: (", bichito[1]+1, ", ", bichito[0]+1, ") | Tiempo: ", tiempo, " | Botiquines: ", vidas[0])
+			print("Sector: ", sector, " | Cuadrados recorridos: ", cuadraditos)
+			# Muestra el Mapa
 			for y in range(20):
 			 	for x in range(10):
 			 		if([y, x] == saltamontes and vivo):
@@ -133,16 +138,13 @@ while(not termino):
 			 	print()
 			termino = True
 		elif(tablero[saltamontes[0]][saltamontes[1]] == bomba):
-			if(vidas[1] > 0):
-				vidas[1] -=1
-				tablero[saltamontes[0]][saltamontes[1]] = 0
-			else:
-				#print(Fore.RED + "EL SALTAMONES EXPLOTO")
-				vivo = False
+			# EL SALTAMONES EXPLOTO
+			tablero[saltamontes[0]][saltamontes[1]] = 0
+			vivo = False
 		elif (tablero[saltamontes[0]][saltamontes[1]] == botiquin):
-				vidas[1]+=1
-				tablero[saltamontes[0]][saltamontes[1]] = 0
-				#print(Fore.RED + Style.BRIGHT + "EL SALTAMONTES SE ROBO UN BOTIQUIN")
+			vidas[1]+=1
+			tablero[saltamontes[0]][saltamontes[1]] = 0
+			#print(Fore.RED + Style.BRIGHT + "EL SALTAMONTES SE ROBO UN BOTIQUIN")
 
 	else:
 		print(Fore.RED + "EL SALTAMONES EXPLOTO")
@@ -152,7 +154,7 @@ while(not termino):
 	for i in range(3):
 		if (not termino):
 			system("cls")
-
+			tempcord = list(bichito)
 			if(direccion == arriba) and (bichito[0]-1 >= 0):
 				bichito[0] -= 1
 			if(direccion == der) and (bichito[1]+1 < 10):
@@ -169,15 +171,15 @@ while(not termino):
 				print(Fore.GREEN + "EL BICHITO ESCAPO")
 				termino = True
 			elif(tablero[bichito[0]][bichito[1]] == bomba):
+				print(Fore.RED + "EL BICHITO EXPLOTO")
+				termino = True
+			elif (bichito == saltamontes and vivo):
 				if(vidas[0] > 0):
 					vidas[0] -=1
-					tablero[bichito[0]][bichito[1]] = 0
+					##print(Fore.GREEN + "USO UN BOTIQUIN")
 				else:
-					print(Fore.RED + "EL BICHITO EXPLOTO")
+					print(Fore.RED + "EL SALTAMONTES SE COMIO AL BICHITO :(")
 					termino = True
-			elif (bichito == saltamontes):
-				print(Fore.RED + "EL SALTAMONTES SE COMIO AL BICHITO :(")
-				termino = True
 			#chequeo del sector de bicho
 			if(bichito[0] < 10) and (bichito[1] < 5):
 				sector = 1
@@ -189,12 +191,14 @@ while(not termino):
 				sector = 4
 
 			#datos del bicho
+			if (tempcord != bichito):
+				cuadraditos+=1
 			if(vivo):
 				print("Saltamones: (", saltamontes[1]+1, ", ", saltamontes[0]+1, ") | Botiquines Robados: ", vidas[1])
 			else:
 				print(Fore.RED + "EL SALTAMONTES EXPLOTO")
-			print("Bichito: (", bichito[1]+1, ", ", bichito[0]+1, ") | Tiempo: ", tiempo, " | Botiquines: ", vidas[0])
-			print("Sector: ", sector)
+			print("\nBichito: (", bichito[1]+1, ", ", bichito[0]+1, ") | Tiempo: ", tiempo, " | Botiquines: ", vidas[0])
+			print("Sector: ", sector, " | Cuadrados recorridos: ", cuadraditos)
 			# Muestra el Mapa
 			for y in range(20):
 			 	for x in range(10):
@@ -213,7 +217,7 @@ while(not termino):
 			 		elif(tablero[y][x] == 3):
 			 			print(Style.BRIGHT + Fore.MAGENTA + str(tablero[y][x]), end=" ")
 			 	print()
-			sleep(0.24)
-	sleep(0.25)
+			sleep(retraso)
+	sleep(retraso)
 	tiempo += 1
-# input("Persiona ENTER para salir...")
+input("Persiona ENTER para salir...")
