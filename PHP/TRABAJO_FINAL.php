@@ -192,7 +192,7 @@
 			echo "<center><div id=\"consultar\"><div class=\"header\">CONCENTRACIÓN DE NOTAS</div><table>
 					<tr>
 						<form action=\"notas.php\" method=\"post\">
-							<td>Código:</td>
+							<td>CÓDIGO:</td>
 							<td><input class=\"$clase\" style=\"padding:7px;\" type=\"text\" name=\"codigo\" value=\"$codigo\"></td>
 							<td><input class=\"boton\"type=\"submit\" value=\"Buscar\"></td>
 						</form>
