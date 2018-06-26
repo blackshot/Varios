@@ -54,6 +54,11 @@
 		}
 		#consultar{
 			margin: auto auto;
+			background-color: #fff;
+			width: 398px;
+			padding: 26px;
+			border-radius: 14px;
+			box-shadow: 0px 0px 16px 0px green;
 
 		}
 
@@ -187,9 +192,7 @@
 			if($_SERVER["REQUEST_METHOD"] == "POST" && $clase != "error"){
 				ShowAlumno($codigo);
 			}
-			echo "</div></center>";
-
-			# SELECT alumnos.IdAlumno as alumno, ramos.nombre, AVG(notas.nota) as promedio from alumnos, ramos, notas WHERE alumnos.idAlumno=1 AND notas.IdAlumno=alumnos.IdAlumno and notas.IdRamo=ramos.IdRamo group by alumnos.IdAlumno, ramos.nombre ORDER by ramos.IdRamo 
+			echo "</div></center>"; 
 
 		?>
 		<!--<img class="buho" src="http://pumpernickelpixie.com/wp-content/uploads/2015/06/33.gif"\>-->
