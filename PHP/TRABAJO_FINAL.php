@@ -5,26 +5,28 @@
 	  <style>
 	  	
 		body{
-			background-image: url(http://www.paritariojmc.cl/images/monumento.jpg);
-			background-size: cover;
-			background-repeat: no-repeat;
+			background: url(http://www.paritariojmc.cl/images/monumento.jpg) no-repeat center center fixed;
+			background-size: 100% 100%;
 			font-family: Verdana, Geneva, sans-serif;
 		}
 		.notas {
 			background-color: white;
 			color: black;
-			/*padding: 13px;*/
 			margin-top: 10px;
-			border: 1px solid grey;
+			/*border: 1px solid grey;*/
+			width: 100%
 		}
 
 		table.notas td {
-			padding: 10px;
-			transition: 0.5s;
+			padding-left: 10px;
+			padding-right: 10px;
+			transition: 0.3s;
 		}
 		table.notas tr:hover td{
 			background-color: #E2E2E2;
-			transition: 0.5s;
+			padding-top: 7px;
+			padding-bottom: 7px;
+			transition: 0.3s;
 		}
 
 		.error{
@@ -34,8 +36,10 @@
 
 		.alumno{
 			background: white;
-			border: 1px solid gray;
+			border-top: 1px solid gray;
+			border-bottom: 1px solid gray;
 			padding: 10px;
+			width: 100%
 		}
 
 		.boton{
@@ -55,8 +59,10 @@
 		#consultar{
 			margin: auto auto;
 			background-color: #fff;
-			width: 398px;
-			padding: 26px;
+			display: inline-block;
+			/*padding-top: 26px;*/
+			padding-bottom: 26px;
+			min-width: 490px;
 			border-radius: 14px;
 			box-shadow: 0px 0px 16px 0px green;
 
@@ -68,6 +74,14 @@
 			position: fixed;
 			bottom: 10px;
 			right: 10px;
+		}
+		.header{
+			background: green;
+			width: 100%;
+			border-radius: 13px 12px 0px 0px;
+			padding-bottom: 5px;
+			font-size: 27px;
+			color: white;
 		}
 
 	  </style>
@@ -122,14 +136,14 @@
 							else{
 								echo "<table class=\"notas\" cellspacing=\"0\">";
 								while($Fila = mysqli_fetch_assoc($Result)) {
-									echo "<tr class=\"hovereable\">
+									echo "<tr>
 											<td>$Fila[nombre]</td>
 											<td style=\"text-align: right;\">" . (is_null($Fila['promedio']) ? "---" : $Fila['promedio']) . "</td>
 										  </tr>";
 								}
 								echo "<tr><td colspan=\"2\">----------------------------------------------------</td></tr>";
 								mysqli_free_result($Result);
-								$Result = mysqli_query($conn, "SELECT AVG(ROUND(TMP.promedio)) as pfinal FROM (SELECT alumnos.IdAlumno as alumno, ramos.nombre, AVG(notas.nota) as promedio from alumnos, ramos, notas WHERE alumnos.idAlumno=$codigox AND notas.IdAlumno=alumnos.IdAlumno and notas.IdRamo=ramos.IdRamo group by alumnos.IdAlumno, ramos.nombre ORDER by ramos.IdRamo) as TMP;");
+								$Result = mysqli_query($conn, "SELECT ROUND(AVG(TMP.promedio))as pfinal FROM (SELECT A.nombre, ROUND(AVG(B.nota)) promedio from ramos A left outer join (SELECT * FROM notas where notas.IdAlumno=$codigox) B on A.IdRamo=B.IdRamo GROUP BY A.IdRamo) as TMP;");
 
 								if (mysqli_affected_rows($conn) == 0){
 									echo "<tr><td colspan=2 style=\"color:red;\">No se pudo calcular el promedio</td></tr>";
@@ -151,9 +165,7 @@
 
 			
 
-			$codigo = $nameErr = "";
-			$clase = "";
-			$str = "";
+			$codigo = $nameErr = $clase = "";
 
 			if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				if(empty($_POST['codigo'])){
@@ -177,7 +189,7 @@
 			}
 
 							
-			echo "<center><div id=\"consultar\"><table>
+			echo "<center><div id=\"consultar\"><div class=\"header\">CONCENTRACIÓN DE NOTAS</div><table>
 					<tr>
 						<form action=\"notas.php\" method=\"post\">
 							<td>Código:</td>
@@ -185,7 +197,7 @@
 							<td><input class=\"boton\"type=\"submit\" value=\"Buscar\"></td>
 						</form>
 					</tr>";
-			echo "</table><br>";
+			echo "</table>";
 			if($nameErr != ""){
 				echo "<h3 style=\"color: red;\"><td>$nameErr</h3>";
 			}
