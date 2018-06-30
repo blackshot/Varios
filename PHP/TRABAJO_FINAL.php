@@ -5,7 +5,7 @@
 	  <style>
 	  	
 		body{
-			background: url(http://www.paritariojmc.cl/images/monumento.jpg) no-repeat center center fixed;
+			background: url(http://www.vinadelmar.usm.cl/wp-content/uploads/2014/07/usm-vina-universidad.jpg) no-repeat center center fixed;
 			background-size: 100% 100%;
 			font-family: Verdana, Geneva, sans-serif;
 		}
@@ -27,6 +27,10 @@
 			padding-top: 7px;
 			padding-bottom: 7px;
 			transition: 0.3s;
+		}
+
+		table.notas tr:hover td span{
+			display: inline;
 		}
 
 		.error{
@@ -83,6 +87,7 @@
 			font-size: 27px;
 			color: white;
 		}
+		.hidden{display: none;transition: 1s;}
 
 	  </style>
 	</head>
@@ -96,13 +101,14 @@
 
 			function ShowAlumno($codigox){
 				global $ip, $user, $pw, $db;
-				$conn = mysqli_connect($ip, $user, $pw);
+				$conn = mysqli_connect($ip, $user, $pw, $db);
+				$conn2 = mysqli_connect($ip, $user, $pw, $db);
 				if (!$conn){
 					print("Error de conexion: " . mysqli_connect_error());
 					exit;
 				}
-				mysqli_select_db($conn, $db);
 				mysqli_query($conn, "SET NAMES 'utf8'");
+				mysqli_query($conn2, "SET NAMES 'utf8'");
 				$Result = mysqli_query($conn, "SELECT alumnos.nombre, alumnos.idCurso, cursos.nombre as curso FROM alumnos, cursos WHERE IdAlumno=$codigox and alumnos.idCurso=cursos.IdCurso;");
 				if (!$Result) {
 					echo "Error MySQL: " . mysqli_error($conn);
@@ -125,7 +131,7 @@
 							</table>";
 						}
 						mysqli_free_result($Result);
-						$Result = mysqli_query($conn, "SELECT A.nombre, ROUND(AVG(B.nota)) promedio from ramos A left outer join (SELECT * FROM notas where notas.IdAlumno=$codigox) B on A.IdRamo=B.IdRamo GROUP BY A.IdRamo;");
+						$Result = mysqli_query($conn, "SELECT A.idRamo, A.nombre, ROUND(AVG(B.nota)) promedio from ramos A left outer join (SELECT * FROM notas where notas.IdAlumno=$codigox) B on A.IdRamo=B.IdRamo GROUP BY A.IdRamo;");
 						if (!$Result) {
 							echo "Error MySQL: " . mysqli_error($conn);
 						}
@@ -136,10 +142,26 @@
 							else{
 								echo "<table class=\"notas\" cellspacing=\"0\">";
 								while($Fila = mysqli_fetch_assoc($Result)) {
-									echo "<tr>
-											<td>$Fila[nombre]</td>
-											<td style=\"text-align: right;\">" . (is_null($Fila['promedio']) ? "---" : $Fila['promedio']) . "</td>
-										  </tr>";
+									$color = is_null($Fila['promedio']) ? "black" : ($Fila['promedio'] >= 55 ? "black" : "red");
+									echo "<tr><td>$Fila[nombre]<span class=\"hidden\">";
+									
+									$Result2 = mysqli_query($conn2, "SELECT * from notas where idAlumno=$codigox and idRamo='$Fila[idRamo]'");
+									if(mysqli_affected_rows($conn2)){
+										while($Fila2=mysqli_fetch_assoc($Result2)){
+											echo "<br>&nbsp;&nbsp;&nbsp;&nbsp;Nota $Fila2[numero]";
+										}
+									}
+
+									echo "</span></td>
+											<td style=\"text-align: right; color: $color;\">" . (is_null($Fila['promedio']) ? "---" : $Fila['promedio']) . "<span class=hidden>";
+									if(mysqli_affected_rows($conn2)){
+										mysqli_data_seek($Result2, 0);
+										while($Fila2=mysqli_fetch_assoc($Result2)){
+											echo "<br><font color=\"". ($Fila2['nota'] >= 55 ? "blue" : "red") ."\">$Fila2[nota]</font>";
+										}
+									}
+
+									echo "</span></td></tr>";
 								}
 								echo "<tr><td colspan=\"2\">----------------------------------------------------</td></tr>";
 								mysqli_free_result($Result);
@@ -189,9 +211,10 @@
 			}
 
 							
-			echo "<center><div id=\"consultar\"><div class=\"header\">CONCENTRACIÓN DE NOTAS</div><table>
+			echo "<center><div id=\"consultar\"><div class=\"header\">CONCENTRACIÓN DE NOTAS</div>
+				  <table>
 					<tr>
-						<form action=\"notas.php\" method=\"post\">
+						<form action=\"TRABAJO_FINAL.php\" method=\"post\">
 							<td>CÓDIGO:</td>
 							<td><input class=\"$clase\" style=\"padding:7px;\" type=\"text\" name=\"codigo\" value=\"$codigo\"></td>
 							<td><input class=\"boton\"type=\"submit\" value=\"Buscar\"></td>
