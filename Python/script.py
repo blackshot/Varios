@@ -65,7 +65,7 @@ else:
 		for f in glob.iglob("D:\\**\\*.java", recursive=True):
 			if not any(b for b in (ign in f for ign in ignorar)):
 				if borrar2:
-					# remove(f)
+					remove(f)
 					print("E: " + f)
 				else:
 					print(f)
