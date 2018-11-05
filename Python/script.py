@@ -14,7 +14,7 @@ except Exception as e:
 	borrar = False
 	glob = False
 
-user = "black"
+user = "labinf10"
 ruta = "C:\\Users\\" + user + "\\"
 disco = "D:\\"
 limpiar = ["Desktop\\", "Downloads\\", "Pictures\\", "Videos\\", "Pictures\\", "Favorites\\"
