@@ -53,8 +53,8 @@ if(glob == False):
 else:
 	import glob
 	for f in glob.iglob(ruta + "**\\*.java", recursive=True):
-		if not any(b for b in (ign in f for ign in ignorar)):
-			if(borrar2):
+		if not any(ign in f for ign in ignorar):
+			if borrar2:
 				remove(f)
 				print("E:" + f)
 			else:
@@ -63,7 +63,7 @@ else:
 	print("Limpiando el disco D:\\  ...")
 	try:
 		for f in glob.iglob("D:\\**\\*.java", recursive=True):
-			if not any(b for b in (ign in f for ign in ignorar)):
+			if not any(ign in f for ign in ignorar):
 				if borrar2:
 					remove(f)
 					print("E: " + f)
