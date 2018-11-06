@@ -17,9 +17,9 @@ except Exception as e:
 user = "labinf10"
 ruta = "C:\\Users\\" + user + "\\"
 disco = "D:\\"
-limpiar = ["Desktop\\", "Downloads\\", "Pictures\\", "Videos\\", "Pictures\\", "Favorites\\"
+limpiar = ["Desktop\\", "Downloads\\", "Pictures\\", "Videos\\", "Favorites\\"
 , "Music\\"]
-ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans", "css", "System Volume Information", "$RECYCLE.BIN"]
+ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans", "css", "System Volume Information", "$RECYCLE.BIN", "Camera Roll", "Saved Pictures", "Links", "Dell", "Bing.url"]
 if(glob == False):
 	for path in limpiar:
 		archivos = [archivo for archivo in listdir(ruta + path)]
