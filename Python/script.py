@@ -19,7 +19,7 @@ ruta = "C:\\Users\\" + user + "\\"
 disco = "D:\\"
 limpiar = ["Desktop\\", "Downloads\\", "Pictures\\", "Videos\\", "Favorites\\"
 , "Music\\"]
-ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans", "css", "System Volume Information", "$RECYCLE.BIN", "Camera Roll", "Saved Pictures", "Links", "Dell", "Bing.url"]
+ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans", "css", "System Volume Information", "$RECYCLE.BIN", "Camera Roll", "Saved Pictures", "Links", "Dell", "Bing.url", "Software_II Semestre 2018"]
 if(glob == False):
 	for path in limpiar:
 		archivos = [archivo for archivo in listdir(ruta + path)]
@@ -50,6 +50,7 @@ if(glob == False):
 					print(ruta + path + f)
 	except Exception as e:
 		print("Disco D:\\ no encontrado.")
+		raise e
 else:
 	import glob
 	for f in glob.iglob(ruta + "**\\*.java", recursive=True):
@@ -71,6 +72,7 @@ else:
 					print(f)
 	except Exception as e:
 		print("Disco D:\\ no encontrado.")
+		raise e
 
 
 print("Finalizado")
