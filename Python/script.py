@@ -19,7 +19,7 @@ ruta = "C:\\Users\\" + user + "\\"
 disco = "D:\\"
 limpiar = ["Desktop\\", "Downloads\\", "Pictures\\", "Videos\\", "Pictures\\", "Favorites\\"
 , "Music\\"]
-ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans"]
+ignorar = ["payara5", "Vms", "VMS", "script.py", "NetBeans", "css", "System Volume Information", "$RECYCLE.BIN"]
 if(glob == False):
 	for path in limpiar:
 		archivos = [archivo for archivo in listdir(ruta + path)]
