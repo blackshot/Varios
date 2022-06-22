@@ -44,3 +44,4 @@ do {
 $env:JAVA_HOME = $carpeta;
 $env:Path = Expand-EnvironmentVariablesRecursively([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"));
 Write-Host "JAVA_HOME establecido en: $([Environment]::GetEnvironmentVariable('JAVA_HOME'))')";
+Write-Host "La version fué cambiada para esta sesión y las futuras. Si tienes otras terminales/cmd abiertas, debes cerrarlas para que se apliquen los cambios."
